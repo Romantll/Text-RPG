@@ -3,7 +3,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-typedef struct {
+typedef struct Room {
     const char *name;
     struct Room* north;
     struct Room* south;
