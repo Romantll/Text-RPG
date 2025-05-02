@@ -24,7 +24,8 @@ void movePlayer(Player* player, const char* direction) {
     
     if (dest) {
         player->currentRoom = dest;
+        printf("You move %s to the %s.\n", direction, dest->name);
     } else {
-        printf("You can't go that way!\n");
+        printf("You can't go %s. There's nothing that way.\n", direction);
     }
 }
