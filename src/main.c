@@ -21,7 +21,7 @@ int main (void)
 
     Room* commonRoom = createRoom(
         "Common Room",
-        "A common room with a couple of benches and bookshelves lining the walls. There's a door to the west, and stairs leading upstairs."
+        "A common room with a couple of benches and bookshelves lining the walls. Two strangers are sitting down. There's a door to the west, and stairs leading upstairs."
     );
 
     Room* mainHall = createRoom(
@@ -53,17 +53,11 @@ int main (void)
     addNPCToRoom(commonRoom, drinker); 
     addNPCToRoom(mainHall, bartender);
 
-    NPC* current = player.currentRoom->npcs; // Get the NPC in the current room
-    while (current != NULL) {
-        printf("You see %s here. They say: \"%s\"\n", current->name, current->dialogue);
-        current = current->next;
-    }
 
     char input[64];
 
     while (1) {
-        printf("You are in the %s.\n", player.currentRoom->id);
-        printf("%s\n", player.currentRoom->description);
+        describeRoom(player.currentRoom);
 
         getInput(input, sizeof(input));
 
@@ -87,7 +81,7 @@ int main (void)
         }else if (strcmp(input, "inventory") == 0) {
             listInventory(player.inventory);
         } else if (strncmp(input, "equip ", 6) == 0) {
-            equipItem(player.inventory, input + 6); // Pass the item name after "equip "
+            equipItem(&player, input + 6); // Pass the item name after "equip "
         }else if (strncmp(input, "talk ", 5)==0){
             talkToNPC(&player, player.currentRoom, input + 5);
         } 

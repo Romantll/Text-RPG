@@ -19,5 +19,6 @@ typedef struct Room {
 void addNPCToRoom(Room* room, NPC* npc);
 Room* createRoom(const char* id, const char* description);
 void linkRooms(Room* a, Room* b, const char* direction);
+void describeRoom(Room* room);
 
 #endif 

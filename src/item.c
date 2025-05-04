@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../include/item.h"
+#include "../include/player.h"
 
 Item* createItem(int id, const char* name, const char* desc, int damage, int armor, int healing)
 {
@@ -21,7 +22,7 @@ Item* createItem(int id, const char* name, const char* desc, int damage, int arm
 Item* createWorldItem(int id){
     switch (id) {
         case 1:
-            return createItem(1, "Iron Sword", "A sharp iron sword.", 10, 0, 0);
+            return createItem(1, "Iron Sword", "A basic iron sword.", 5, 0, 0);
         case 2:
             return createItem(2, "Potion", "Heals you for 25 HP.", 0, 0, 25);
         case 3:
@@ -96,22 +97,32 @@ int dropItem(Item** inventory, const char* name) {
     return 0; 
 }
 
-int equipItem(Item* inventory, const char* name){
-    Item* toEquip = findItem(inventory, name);
-    if (!toEquip) {
-        printf("Item not found in inventory.\n");
-        return 0; // Item not found
+void equipItem(Player* player, const char* itemName) {
+    Item* item = findItem(player->inventory, itemName);
+    if (!item) {
+        printf("You don't have that item.\n");
+        return;
     }
 
-    Item* temp = inventory;
-    while (temp != NULL) {
-        temp->equipped = 0; 
-        temp = temp->next; // Un-equip all items
+    if (item->damage > 0) {
+        if (player->equippedWeapon) {
+            player->equippedWeapon->equipped = 0;
+            printf("You unequip %s.\n", player->equippedWeapon->name);
+        }
+        player->equippedWeapon = item;
+        item->equipped = 1;
+        printf("You equip %s as your weapon.\n", item->name);
+    } else if (item->armor > 0) {
+        if (player->equippedArmor) {
+            player->equippedArmor->equipped = 0;
+            printf("You unequip %s.\n", player->equippedArmor->name);
+        }
+        player->equippedArmor = item;
+        item->equipped = 1;
+        printf("You equip %s as your armor.\n", item->name);
+    } else {
+        printf("You can't equip that item.\n");
     }
-
-    toEquip->equipped = 1; // Equip the selected item
-    printf("You equipped %s.\n", toEquip->name);
-    return 1; 
 }
 
 Item* findItem(Item* inventory, const char* name) {

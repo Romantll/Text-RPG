@@ -8,6 +8,8 @@ Player createPlayer(Room* startRoom) {
     Player p;
     p.currentRoom = startRoom;
     p.inventory = NULL; 
+    p.equippedWeapon = NULL;
+    p.equippedArmor = NULL;
     return p;
 }
 

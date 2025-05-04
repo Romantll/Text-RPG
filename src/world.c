@@ -46,3 +46,16 @@ void linkRooms(Room* a, Room* b, const char* direction){
         fprintf(stderr, "Invalid direction: %s\n", direction);
     }
 }
+ void describeRoom(Room* room) {
+    printf("You are in %s.\n", room->id);
+    printf("%s\n", room->description);
+
+    NPC* npc = room->npcs;
+    if (npc) {
+        printf("You see:\n");
+        while (npc) {
+            printf(" - %s\n", npc->name);
+            npc = npc->next;
+        }
+    }
+ }

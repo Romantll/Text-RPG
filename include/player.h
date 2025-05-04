@@ -5,9 +5,11 @@
 #include "world.h"
 #include "item.h"
 
-typedef struct{
+typedef struct Player {
     Room* currentRoom;
     Item* inventory; 
+    Item* equippedWeapon; 
+    Item* equippedArmor;
 }Player;
 
 Player createPlayer(Room* startRoom);
