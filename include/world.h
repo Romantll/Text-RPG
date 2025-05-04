@@ -5,18 +5,19 @@
 
 typedef struct Room {
     const char *id;
-    const char *name;
     const char *description;
 
     struct Room* north;
     struct Room* south;
     struct Room* east;
     struct Room* west;
-
-    NPC* npc; // Pointer to an NPC in the room
+    struct Room* up;
+    struct Room* down;
+    struct NPC* npcs; // Pointer to an NPC in the room
 } Room;
 
-Room* createRoom(const char* name, const char* id, const char* description);
+void addNPCToRoom(Room* room, NPC* npc);
+Room* createRoom(const char* id, const char* description);
 void linkRooms(Room* a, Room* b, const char* direction);
 
 #endif 

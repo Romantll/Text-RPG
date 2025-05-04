@@ -5,7 +5,7 @@
 #include "../include/world.h"
 
 
-Room* createRoom(const char* id, const char* name, const char* description) {
+Room* createRoom(const char* id, const char* description) {
     Room* r = malloc(sizeof(Room));
     if (!r) {
         fprintf(stderr, "Failed to allocate memory for room\n");
@@ -13,11 +13,10 @@ Room* createRoom(const char* id, const char* name, const char* description) {
     }
 
     r->id = id;
-    r->name = name;
     r->description = description;
 
-    r->north = r->south = r->east = r->west = NULL;
-    r->npc = NULL; // start with no NPCs in the room
+    r->north = r->south = r->east = r->west = r->up = r->down = NULL;
+    r->npcs = NULL; // start with no NPCs in the room
 
     return r;
 }
@@ -36,5 +35,14 @@ void linkRooms(Room* a, Room* b, const char* direction){
     } else if (strcmp(direction, "west") == 0) {
         a->west = b;
         b->east = a;
+    }
+    else if (strcmp(direction, "up") == 0) {
+        a->up = b;
+        b->down = a;
+    } else if (strcmp(direction, "down") == 0) {
+        a->down = b;
+        b->up = a;
+    } else {
+        fprintf(stderr, "Invalid direction: %s\n", direction);
     }
 }
