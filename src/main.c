@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "../include/world.h"
 #include "../include/player.h"
 #include "../include/npc.h"
 #include "../include/input.h"
+#include "../include/item.h"
+#include "../include/save_load.h"
 
 
 int main (void)
@@ -48,10 +51,12 @@ int main (void)
     NPC* reader = createNPC("Scholar", "Nothing like a good book to pass the time.", NPC_FRIENDLY);
     NPC* drinker = createNPC("Wanderer", "Nothing like a good drink to warm the soul.", NPC_FRIENDLY);
     NPC* bartender = createNPC("Bartender", "Good morning travler. Here is your stuff.", NPC_FRIENDLY);
+    NPC* bandit = createHostileNPC("Bandit", "Hello friend.", 25, 5, 2, 100);
 
     addNPCToRoom(commonRoom, reader);
     addNPCToRoom(commonRoom, drinker); 
     addNPCToRoom(mainHall, bartender);
+    addNPCToRoom(kitchen, bandit);
 
 
     char input[64];
@@ -84,9 +89,45 @@ int main (void)
             equipItem(&player, input + 6); // Pass the item name after "equip "
         }else if (strncmp(input, "talk ", 5)==0){
             talkToNPC(&player, player.currentRoom, input + 5);
-        } 
-        else {
-            printf("I don't understand '%s'. Try north, south, east, or west.\n", input);
+        }else if (strncmp(input, "use ", 4) == 0) {
+            useItem(&player, input + 4);   
+        }else if (strcmp(input, "stats") == 0) {
+            showStats(&player);    
+        }else if (strcmp(input, "save") == 0) {
+            saveGame(&player, "savefile.txt");
+        }else if (strcmp(input, "load") == 0) {
+            loadGame(&player, "savefile.txt");
+        }else if (strncmp(input, "attack ", 7) == 0) {
+            char* target = input + 7;
+            NPC* npc = player.currentRoom->npcs;
+
+            while (npc) {
+                if (strcmp(npc->name, target) == 0) {
+                    CombatResult result = fight(&player, npc);
+
+                    if (result == COMBAT_WON) {
+                        
+                        NPC** current = &player.currentRoom->npcs;
+                        while (*current)
+                        {
+                            *current = npc->next;
+                            free(npc);
+                             printf("You defeated %s!\n", target);
+                            printf("You gain %d XP!\n", npc->xpReward);
+                            break;   
+                        }
+                        current = &(*current)->next;      
+                    }
+                    break;
+                }
+            }
+
+            if (!npc) {
+                printf("You don't see %s here.\n", target);
+            }
+
+        } else {
+            printf("I don't understand '%s'. Try north, south, east, west, up, or down.\n", input);
         }
 }
     return 0;

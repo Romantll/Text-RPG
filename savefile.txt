@@ -1,0 +1,6 @@
+room: Player Room
+health: 100
+maxHP: 100
+level: 1
+exp: 0
+inventory: 

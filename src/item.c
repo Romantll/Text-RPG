@@ -154,3 +154,45 @@ Item* getEquippedArmor(Item* inventory){
     }
     return NULL; // No equipped armor found
 }
+
+void useItem(Player* player, const char* itemName) {
+    Item* current = player->inventory;
+    Item* prev = NULL;
+
+    while (current != NULL) {
+        if (strcmp(current->name, itemName) == 0) {
+            if (current->healing > 0) {
+                printf("You use %s and recover %d HP.\n", current->name, current->healing);
+                player->hp += current->healing;
+                if (player->hp > player->maxHp) {
+                    player->hp = player->maxHp; // Cap HP at max HP
+                }
+
+                // Remove item from inventory after use
+                if (prev == NULL) {
+                    player->inventory = current->next;
+                } else {
+                    prev->next = current->next;
+                }
+
+                free(current);
+                return;
+            } else {
+                printf("You can't use %s.\n", current->name);
+                return;
+            }
+        }
+        prev = current;
+        current = current->next;
+    }
+
+    printf("You don't have that item.\n");
+}
+
+Item* createWorldItemByName(const char* name) {
+    //Update to txt file when implemented
+    if (strcmp(name, "Iron Sword") == 0) return createWorldItem(1);
+    if (strcmp(name, "Potion") == 0) return createWorldItem(2);
+    if (strcmp(name, "Leather Armor") == 0) return createWorldItem(3);
+    return NULL; // Invalid item name
+}

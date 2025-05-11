@@ -1,7 +1,9 @@
 // include/world.h
-#include "npc.h"
+
 #ifndef WORLD_H
 #define WORLD_H
+
+struct NPC;
 
 typedef struct Room {
     const char *id;
@@ -16,9 +18,10 @@ typedef struct Room {
     struct NPC* npcs; // Pointer to an NPC in the room
 } Room;
 
-void addNPCToRoom(Room* room, NPC* npc);
+void addNPCToRoom(Room* room, struct NPC* npc);
 Room* createRoom(const char* id, const char* description);
 void linkRooms(Room* a, Room* b, const char* direction);
 void describeRoom(Room* room);
+Room* findRoomById(const char* id);
 
 #endif 

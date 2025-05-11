@@ -3,7 +3,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/world.h"
+#include "../include/npc.h"
 
+#define MAX_ROOMS 100 
+
+static Room* allRooms[MAX_ROOMS];
+static int roomCount = 0;
 
 Room* createRoom(const char* id, const char* description) {
     Room* r = malloc(sizeof(Room));
@@ -18,6 +23,11 @@ Room* createRoom(const char* id, const char* description) {
     r->north = r->south = r->east = r->west = r->up = r->down = NULL;
     r->npcs = NULL; // start with no NPCs in the room
 
+    if (roomCount < MAX_ROOMS) {
+        allRooms[roomCount++] = r;
+    } else {
+        printf("Room limit reached. Cannot add more rooms.\n");
+     }
     return r;
 }
 
@@ -50,7 +60,7 @@ void linkRooms(Room* a, Room* b, const char* direction){
     printf("You are in %s.\n", room->id);
     printf("%s\n", room->description);
 
-    NPC* npc = room->npcs;
+    struct NPC* npc = room->npcs;
     if (npc) {
         printf("You see:\n");
         while (npc) {
@@ -58,4 +68,13 @@ void linkRooms(Room* a, Room* b, const char* direction){
             npc = npc->next;
         }
     }
+ }
+
+ Room* findRoomById(const char* id) {
+    for (int i = 0; i < roomCount; i++) {
+        if (strcmp(allRooms[i]->id, id) == 0) {
+            return allRooms[i];
+        }
+    }
+    return NULL;
  }

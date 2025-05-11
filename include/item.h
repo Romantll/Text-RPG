@@ -20,5 +20,7 @@ void equipItem(Player* player, const char* itemName);
 Item* findItem(Item* inventory, const char* name);
 Item* getEquippedWeapon(Item* inventory);
 Item* getEquippedArmor(Item* inventory);
+void useItem(Player* player, const char* itemName);
+Item* createWorldItemByName(const char* name);
 
 #endif // ITEM_H
