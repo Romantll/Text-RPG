@@ -1,5 +1,8 @@
 # Text-Based RPG – Save/Load & World Design
 
+## Screenshot
+<img width="1299" height="737" alt="Text-RPG" src="https://github.com/user-attachments/assets/fcd58256-6bf3-4e68-a3d6-7f18b20db26b" />
+
 ## 📜 Overview
 This is a text-based RPG written in C to reinforce understanding of data structures and algorithms. The project features inventory systems, combat mechanics, room navigation, NPCs, leveling, and save/load functionality.
 
